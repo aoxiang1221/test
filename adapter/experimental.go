@@ -18,6 +18,7 @@ type ClashServer interface {
 	PreStarter
 	Mode() string
 	ModeList() []string
+	CacheFile() CacheFile
 	HistoryStorage() *urltest.HistoryStorage
 	RoutedConnection(ctx context.Context, conn net.Conn, metadata InboundContext, matchedRule Rule) (net.Conn, Tracker)
 	RoutedPacketConnection(ctx context.Context, conn N.PacketConn, metadata InboundContext, matchedRule Rule) (N.PacketConn, Tracker)
@@ -38,6 +39,8 @@ type CacheFile interface {
 	StoreGroupExpand(group string, expand bool) error
 	LoadRuleSet(tag string) *SavedRuleSet
 	SaveRuleSet(tag string, set *SavedRuleSet) error
+	LoadProviderExpand(provider string) (isExpand bool, loaded bool)
+	StoreProviderExpand(provider string, expand bool) error
 }
 
 type SavedRuleSet struct {

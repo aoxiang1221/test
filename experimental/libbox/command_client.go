@@ -29,6 +29,7 @@ type CommandClientHandler interface {
 	WriteLog(message string)
 	WriteStatus(message *StatusMessage)
 	WriteGroups(message OutboundGroupIterator)
+	WriteProviders(message OutboundProviderIterator)
 	InitializeClashMode(modeList StringIterator, currentMode string)
 	UpdateClashMode(newMode string)
 }
@@ -99,6 +100,13 @@ func (c *CommandClient) Connect() error {
 		}
 		c.handler.Connected()
 		go c.handleGroupConn(conn)
+	case CommandProvider:
+		err = binary.Write(conn, binary.BigEndian, c.options.StatusInterval)
+		if err != nil {
+			return E.Cause(err, "write interval")
+		}
+		c.handler.Connected()
+		go c.handleProviderConn(conn)
 	case CommandClashMode:
 		var (
 			modeList    []string

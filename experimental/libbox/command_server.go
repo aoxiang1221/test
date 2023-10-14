@@ -172,6 +172,12 @@ func (s *CommandServer) handleConnection(conn net.Conn) error {
 		return s.handleGetSystemProxyStatus(conn)
 	case CommandSetSystemProxyEnabled:
 		return s.handleSetSystemProxyEnabled(conn)
+	case CommandProvider:
+		return s.handleProviderConn(conn)
+	case CommandProviderExpand:
+		return s.handleSetProviderExpand(conn)
+	case CommandHealthCheck:
+		return s.handleHealthCheck(conn)
 	default:
 		return E.New("unknown command: ", command)
 	}

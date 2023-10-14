@@ -15,6 +15,7 @@ type OutboundProvider interface {
 
 	Start()
 	Close() error
+	CheckOutbounds(force bool)
 	PRLock()
 	PRUnlock()
 	Healthcheck(ctx context.Context, link string, force bool) (map[string]uint16, error)

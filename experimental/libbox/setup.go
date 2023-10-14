@@ -55,3 +55,7 @@ func FormatMemoryBytes(length int64) string {
 func ProxyDisplayType(proxyType string) string {
 	return C.ProxyDisplayName(proxyType)
 }
+
+func ProviderDisplayType(providerType string) string {
+	return C.ProviderDisplayName(providerType)
+}

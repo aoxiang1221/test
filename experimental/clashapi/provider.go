@@ -3,12 +3,12 @@ package clashapi
 import (
 	"context"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/sagernet/sing-box/adapter"
+	C "github.com/sagernet/sing-box/constant"
 	F "github.com/sagernet/sing/common/format"
 	"github.com/sagernet/sing/common/json/badjson"
 )
@@ -34,7 +34,7 @@ func providerInfo(server *Server, provider adapter.OutboundProvider) *badjson.JS
 	}
 	info.Put("name", provider.Tag())
 	info.Put("type", "Proxy")
-	info.Put("vehicleType", strings.ToUpper(provider.Type()))
+	info.Put("vehicleType", C.ProviderDisplayName(provider.Type()))
 	info.Put("subscriptionInfo", provider.SubscriptionInfo())
 	info.Put("updatedAt", provider.UpdateTime().Format("2006-01-02T15:04:05.999999999-07:00"))
 	info.Put("proxies", &proxyArray)

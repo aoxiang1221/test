@@ -13,4 +13,7 @@ const (
 	CommandSetClashMode
 	CommandGetSystemProxyStatus
 	CommandSetSystemProxyEnabled
+	CommandProvider
+	CommandProviderExpand
+	CommandHealthCheck
 )
