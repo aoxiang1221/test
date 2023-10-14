@@ -1,0 +1,32 @@
+name: Build bilibili
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: download file
+        run: |
+          wget -O revanced-cli.jar https://github.com/aoxiang1221/test/releases/download/test/revanced-cli-4.0.0-all.jar
+          wget -O revanced-patches.jar https://github.com/aoxiang1221/test/releases/download/test/revanced-patches-2.192.0.jar
+          wget -O revanced-integrations.apk https://github.com/aoxiang1221/test/releases/download/test/revanced-integrations-0.118.0.apk
+          wget -O base.apk https://github.com/aoxiang1221/test/releases/download/test/base.apk
+
+      - name: Build bilibili
+        run: |
+          java -jar revanced-cli.jar patch \
+           --patch-bundle revanced-patches.jar \
+           --merge revanced-integrations.apk \
+           --out patched-app.apk \
+           base.apk
+
+      - name: Upload built apk
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: bilibili
+          path: |
+              ./patched-app.apk

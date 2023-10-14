@@ -1,0 +1,26 @@
+name: Build revanced_cli
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: pcgsky/revanced-cli
+          path: .
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew build --no-daemon
+      - name: Upload built apk
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: revanced_cli
+          path: |
+              ./build/libs/revanced-cli-*-all.jar
