@@ -1,0 +1,34 @@
+name: Build patches
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: zjns/BiliRoamingX-patches
+          path: .
+
+      - name: Build with Gradle 
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        run: ./gradlew generateMeta
+
+      - name: Upload patches.jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: patches.jar
+          path: |
+            ./build/libs/*.jar
+
+      - name: Upload patches.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: patches.json
+          path: |
+            ./patches.json

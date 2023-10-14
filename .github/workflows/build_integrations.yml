@@ -1,0 +1,32 @@
+name: Build integrations
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: zjns/BiliRoamingX-integrations
+          path: .
+
+      - name: Setup Java 
+        run: echo "JAVA_HOME=$JAVA_HOME_17_X64" >> $GITHUB_ENV 
+
+      - name: Build with Gradle 
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        run: |
+          echo org.gradle.jvmargs=-Xmx8g >> gradle.properties
+          ./gradlew build
+
+      - name: Upload integrations.apk
+        uses: actions/upload-artifact@v3
+        with:
+          name: integrations
+          path: |
+            ./app/build/outputs/apk/release/*.apk
