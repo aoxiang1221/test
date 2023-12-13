@@ -19,14 +19,15 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: PuerNya/sing-box
-          ref: dev-next
+          ref: sfa-test
           path: sing-box
           fetch-depth: 0
 
       - name: Checkout sing-box-android
         uses: actions/checkout@v4
         with:
-          ref: sfa
+          repository: PuerNya/sing-box-for-android
+          ref: test
           path: sing-box-for-android
 
       - name: Get latest go version 
