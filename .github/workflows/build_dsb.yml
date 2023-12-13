@@ -18,16 +18,16 @@ jobs:
       - name: Checkout sing-box
         uses: actions/checkout@v4
         with:
-          repository: PuerNya/sing-box
-          ref: sfa-test
+          repository: CHIZI-0618/sing-box
+          ref: dev-next-PuerNya
           path: sing-box
           fetch-depth: 0
 
       - name: Checkout sing-box-android
         uses: actions/checkout@v4
         with:
-          repository: PuerNya/sing-box-for-android
-          ref: test
+          repository: aoxiang1221/sing-box
+          ref: sfa
           path: sing-box-for-android
 
       - name: Get latest go version 
@@ -42,7 +42,6 @@ jobs:
           check-latest: true
           cache-dependency-path: |
             ./sing-box/go.sum
-            ./sing-box-for-android/go.sum
 
       - name: Setup Java 
         uses: actions/setup-java@v3 
@@ -77,9 +76,9 @@ jobs:
           rm -rf ./sing-box-for-android/app/release.keystore
           cp ./repo/dsb/release.keystore ./sing-box-for-android/app
 
-          sed -i 's/applicationId "io.nekohasekai.sfa"/applicationId "com.github.aoxiang.dsb.test"/' ./sing-box-for-android/app/build.gradle
+          sed -i 's/applicationId "io.nekohasekai.sfa"/applicationId "com.aoxiangdsb.test"/' ./sing-box-for-android/app/build.gradle
 
-          sed -i 's/android:targetPackage="io.nekohasekai.sfa"/android:targetPackage="com.github.aoxiang.dsb.test"/' ./sing-box-for-android/app/src/main/res/xml/shortcuts.xml
+          sed -i 's/android:targetPackage="io.nekohasekai.sfa"/android:targetPackage="com.aoxiang.dsb.test"/' ./sing-box-for-android/app/src/main/res/xml/shortcuts.xml
 
       - name: build dsb
         run: |
@@ -92,21 +91,11 @@ jobs:
           echo ALIAS_NAME="aoxiang1221" >> local.properties
           echo ALIAS_PASS="12345678" >> local.properties
 
-          ./gradlew :app:assemblePlayRelease && ./gradlew --stop
+          ./gradlew assembleRelease && ./gradlew --stop
 
-      - name: Release and upload assets
-        uses: svenstaro/upload-release-action@v2
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: ${{ env.VERSION_NAME }}
-          tag: ${{ env.VERSION_CODE }}
-          file_glob: true
-          file: ./sing-box-for-android/app/build/outputs/apk/play/release/*.apk
-
-      - name: Remove old releases
-        uses: dev-drprasad/delete-older-releases@v0.3.2
-        with:
-          keep_latest: 1
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: SFA-arm64-v8a
+          path: |
+            sing-box-for-android/app/build/outputs/apk/release/*-arm64-v8a.apk
