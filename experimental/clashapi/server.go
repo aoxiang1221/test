@@ -48,6 +48,7 @@ type Server struct {
 	mode           string
 	modeList       []string
 	modeUpdateHook chan<- struct{}
+	cacheFile      adapter.CacheFile
 
 	externalController       bool
 	externalUI               string
@@ -207,6 +208,10 @@ func (s *Server) SetMode(newMode string) {
 		}
 	}
 	s.logger.Info("updated mode: ", newMode)
+}
+
+func (s *Server) CacheFile() adapter.CacheFile {
+	return s.cacheFile
 }
 
 func (s *Server) HistoryStorage() *urltest.HistoryStorage {
