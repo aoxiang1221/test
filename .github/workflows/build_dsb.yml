@@ -80,6 +80,8 @@ jobs:
 
           sed -i 's/android:targetPackage="io.nekohasekai.sfa"/android:targetPackage="com.aoxiang.dsb.test"/' ./sing-box-for-android/app/src/main/res/xml/shortcuts.xml
 
+          sed -i 's/org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8/org.gradle.jvmargs=-Xmx4096m -Dfile.encoding=UTF-8/' ./sing-box-for-android/gradle.properties
+
       - name: build dsb
         run: |
           cd ./sing-box-for-android
