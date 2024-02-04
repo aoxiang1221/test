@@ -1,0 +1,35 @@
+name: Build cleaner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: MaterialCleaner/MaterialCleaner
+          path: .
+
+      - name: Setup Java 
+        uses: actions/setup-java@v3 
+        with:
+          java-version: '17'
+          distribution: 'oracle'
+          check-latest: true
+          cache: 'gradle'
+
+      - name: build cleaner
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease
+
+      - name: Upload built apk
+        uses: actions/upload-artifact@v3
+        with:
+          name: cleaner
+          path: |
+            .
